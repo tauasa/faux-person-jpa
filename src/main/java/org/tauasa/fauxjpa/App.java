@@ -1,4 +1,4 @@
-package org.tauasa.fauxexample;
+package org.tauasa.fauxjpa;
 
 import jakarta.persistence.PersistenceException;
 import java.io.PrintStream;
@@ -17,7 +17,7 @@ import org.tauasa.faux.model.Region;
  * Generates random people with faux-person and saves them to a database.
  *
  * <pre>
- * java -jar target/faux-person-example-0.1.0-SNAPSHOT.jar -n 500 --seed 42
+ * java -jar target/faux-person-jpa-0.1.0-SNAPSHOT.jar -n 500 --seed 42
  * </pre>
  */
 public final class App {
@@ -26,7 +26,7 @@ public final class App {
     static final String DEFAULT_DB = "jdbc:h2:file:./data/faux-people";
 
     static final String USAGE = """
-            usage: faux-person-example [options]
+            usage: faux-person-jpa [options]
 
               -n, --count N        how many people to generate and save (default 100)
               -s, --seed S         seed, to generate the same people again (default random)
@@ -84,7 +84,7 @@ public final class App {
                 }
             }
         } catch (IllegalArgumentException e) {
-            err.println("faux-person-example: " + e.getMessage());
+            err.println("faux-person-jpa: " + e.getMessage());
             err.print(USAGE);
             return 2;
         }
@@ -109,7 +109,7 @@ public final class App {
             }
             return 0;
         } catch (PersistenceException | IllegalStateException e) {
-            err.println("faux-person-example: database error: " + rootMessage(e));
+            err.println("faux-person-jpa: database error: " + rootMessage(e));
             return 1;
         }
     }

@@ -5,11 +5,11 @@
              version="3.2">
 
   <!-- PeopleStore.open(url) sets jakarta.persistence.jdbc.url; the one here is the default. -->
-  <persistence-unit name="faux-person-example" transaction-type="RESOURCE_LOCAL">
-    <class>org.tauasa.fauxexample.PersonEntity</class>
-    <class>org.tauasa.fauxexample.CompanyEntity</class>
-    <class>org.tauasa.fauxexample.NameEmbeddable</class>
-    <class>org.tauasa.fauxexample.AddressEmbeddable</class>
+  <persistence-unit name="faux-person-jpa" transaction-type="RESOURCE_LOCAL">
+    <class>org.tauasa.fauxjpa.PersonEntity</class>
+    <class>org.tauasa.fauxjpa.CompanyEntity</class>
+    <class>org.tauasa.fauxjpa.NameEmbeddable</class>
+    <class>org.tauasa.fauxjpa.AddressEmbeddable</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
     <properties>
