@@ -1,4 +1,4 @@
-# faux-person-example: specification
+# faux-person-jpa: specification
 
 A small Java command-line application that shows how to use
 [faux-person](https://github.com/tauasa/faux-person): it generates random
@@ -6,8 +6,8 @@ people and saves them to a database through JPA.
 
 | | |
 |---|---|
-| Coordinates | `org.tauasa:faux-person-example:0.1.0-SNAPSHOT`, not published |
-| Package | `org.tauasa.fauxexample` |
+| Coordinates | `org.tauasa:faux-person-jpa:0.1.0-SNAPSHOT`, not published |
+| Package | `org.tauasa.fauxjpa` |
 | Java | 17 (`maven.compiler.release=17`) |
 | Build | Maven |
 | Dependencies | `org.tauasa:faux-person:0.2.0`, Hibernate ORM 7.4 (Jakarta Persistence 3.2), H2 2.5. JUnit 6 at test scope |
@@ -86,7 +86,7 @@ none.
 
 ## 3. The command line
 
-`java -jar target/faux-person-example-<version>.jar [options]`
+`java -jar target/faux-person-jpa-<version>.jar [options]`
 
 | Option | Does | Default |
 |---|---|---|
@@ -118,6 +118,6 @@ what's already stored.
 
 ## 5. Repo and CI
 
-- Public repo `tauasa/faux-person-example`, MIT license, with `main` protected.
+- Public repo `tauasa/faux-person-jpa`, MIT license, with `main` protected.
 - `.githooks/pre-commit` from Sanvio Factory, with `core.hooksPath` set.
 - `.github/workflows/build.yml` runs `mvn -B verify` on JDK 17, for when it's pushed.

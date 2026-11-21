@@ -1,4 +1,4 @@
-# faux-person-example
+# faux-person-jpa
 
 A small Java application that shows how to use
 [faux-person](https://github.com/tauasa/faux-person) with JPA. It generates
@@ -6,7 +6,7 @@ random people and saves them to a database, using Hibernate and an H2 file
 it creates itself, so it runs with no setup.
 
 ```text
-$ java -jar target/faux-person-example-0.1.0-SNAPSHOT.jar -n 500 --seed 42
+$ java -jar target/faux-person-jpa-0.1.0-SNAPSHOT.jar -n 500 --seed 42
 seed: 42
 saved 500 people to jdbc:h2:file:./data/faux-people
 stored: 500 people, 416 companies
@@ -23,7 +23,7 @@ Needs JDK 17 or later and Maven.
 
 ```bash
 mvn package
-java -jar target/faux-person-example-0.1.0-SNAPSHOT.jar -n 500 --seed 42
+java -jar target/faux-person-jpa-0.1.0-SNAPSHOT.jar -n 500 --seed 42
 ```
 
 `mvn package` puts the jar in `target/` and its dependencies in `target/lib/`,
@@ -84,7 +84,7 @@ the same way:
 
 ```java
 import org.tauasa.faux.PersonGenerator;
-import org.tauasa.fauxexample.PeopleStore;
+import org.tauasa.fauxjpa.PeopleStore;
 
 try (PeopleStore store = PeopleStore.open("jdbc:h2:file:./data/faux-people")) {
     store.saveAll(PersonGenerator.builder().seed(42).build().next(100));

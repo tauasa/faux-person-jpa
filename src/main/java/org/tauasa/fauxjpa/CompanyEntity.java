@@ -1,4 +1,4 @@
-package org.tauasa.fauxexample;
+package org.tauasa.fauxjpa;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

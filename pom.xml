@@ -5,11 +5,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.tauasa</groupId>
-  <artifactId>faux-person-example</artifactId>
+  <artifactId>faux-person-jpa</artifactId>
   <version>0.1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>faux-person-example</name>
+  <name>faux-person-jpa</name>
   <description>Generates random people with faux-person and saves them to a database through JPA.</description>
 
   <properties>
@@ -100,7 +100,7 @@
         <version>${maven-surefire-plugin.version}</version>
       </plugin>
 
-      <!-- A runnable jar: java -jar target/faux-person-example-<version>.jar.
+      <!-- A runnable jar: java -jar target/faux-person-jpa-<version>.jar.
            Its manifest lists the jars that the dependency plugin copies to target/lib/. -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -109,7 +109,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>org.tauasa.fauxexample.App</mainClass>
+              <mainClass>org.tauasa.fauxjpa.App</mainClass>
               <addClasspath>true</addClasspath>
               <classpathPrefix>lib/</classpathPrefix>
             </manifest>

@@ -1,4 +1,4 @@
-package org.tauasa.fauxexample;
+package org.tauasa.fauxjpa;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -30,7 +30,7 @@ import org.tauasa.faux.model.Region;
 public final class PeopleStore implements AutoCloseable {
 
     /** The persistence unit in {@code META-INF/persistence.xml}. */
-    public static final String PERSISTENCE_UNIT = "faux-person-example";
+    public static final String PERSISTENCE_UNIT = "faux-person-jpa";
 
     /** People saved between flushes, which is also the JDBC batch size. */
     static final int BATCH = 50;
