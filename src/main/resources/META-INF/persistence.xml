@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_2.xsd"
+             version="3.2">
+
+  <!-- PeopleStore.open(url) sets jakarta.persistence.jdbc.url; the one here is the default. -->
+  <persistence-unit name="faux-person-example" transaction-type="RESOURCE_LOCAL">
+    <class>org.tauasa.fauxexample.PersonEntity</class>
+    <class>org.tauasa.fauxexample.CompanyEntity</class>
+    <class>org.tauasa.fauxexample.NameEmbeddable</class>
+    <class>org.tauasa.fauxexample.AddressEmbeddable</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+
+    <properties>
+      <property name="jakarta.persistence.jdbc.driver" value="org.h2.Driver"/>
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:h2:file:./data/faux-people"/>
+      <property name="jakarta.persistence.jdbc.user" value="sa"/>
+
+      <!-- Create the tables on first use, and add new columns later; never drop data. -->
+      <property name="hibernate.hbm2ddl.auto" value="update"/>
+      <property name="hibernate.jdbc.batch_size" value="50"/>
+      <property name="hibernate.order_inserts" value="true"/>
+    </properties>
+  </persistence-unit>
+</persistence>
