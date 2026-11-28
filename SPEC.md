@@ -6,7 +6,7 @@ people and saves them to a database through JPA.
 
 | | |
 |---|---|
-| Coordinates | `org.tauasa:faux-person-jpa:0.1.0-SNAPSHOT`, not published |
+| Coordinates | `org.tauasa:faux-person-jpa:0.2.0-SNAPSHOT`, not published |
 | Package | `org.tauasa.fauxjpa` |
 | Java | 17 (`maven.compiler.release=17`) |
 | Build | Maven |

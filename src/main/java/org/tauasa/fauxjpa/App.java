@@ -17,7 +17,7 @@ import org.tauasa.faux.model.Region;
  * Generates random people with faux-person and saves them to a database.
  *
  * <pre>
- * java -jar target/faux-person-jpa-0.1.0-SNAPSHOT.jar -n 500 --seed 42
+ * java -jar target/faux-person-jpa-0.2.0-SNAPSHOT.jar -n 500 --seed 42
  * </pre>
  */
 public final class App {
