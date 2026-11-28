@@ -4,6 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,12 +23,14 @@ import org.tauasa.faux.model.Region;
 
 class PeopleStoreTest {
 
+    private String url;
     private PeopleStore store;
 
     @BeforeEach
     void open() {
         // A fresh in-memory database per test, kept until the store closes.
-        store = PeopleStore.open("jdbc:h2:mem:" + UUID.randomUUID() + ";DB_CLOSE_DELAY=-1");
+        url = "jdbc:h2:mem:" + UUID.randomUUID() + ";DB_CLOSE_DELAY=-1";
+        store = PeopleStore.open(url);
     }
 
     @AfterEach
@@ -43,6 +49,37 @@ class PeopleStoreTest {
         assertEquals(500, store.saveAll(generated));
         assertEquals(generated, store.findAll());
         assertEquals(500, store.count());
+    }
+
+    @Test
+    void nativeNamesReadBackInTheirOwnScript() {
+        List<Person> generated = PersonGenerator.builder().seed(11).region(Region.ROK).build().next(200);
+        assertTrue(generated.stream().anyMatch(p -> p.name().nativeName().isPresent()),
+                "the seed should give some Hangul names");
+        store.saveAll(generated);
+        assertEquals(generated, store.findAll());
+    }
+
+    @Test
+    void companiesOutsideTheUsReadBackWithTheirCountry() {
+        List<Person> generated = PersonGenerator.builder().seed(12).region(Region.JPN).build().next(100);
+        assertTrue(generated.stream().anyMatch(p -> !p.employer().country().equals("US")),
+                "the seed should give some employers outside the US");
+        store.saveAll(generated);
+        assertEquals(generated, store.findAll());
+    }
+
+    @Test
+    void aCompanySavedBeforeTheCountryColumnReadsBackAsUs() throws SQLException {
+        Person saved = PersonGenerator.builder().seed(13).region(Region.WESTERN).build().next(50).stream()
+                .filter(p -> p.employer().country().equals("US")).findFirst().orElseThrow();
+        store.saveAll(List.of(saved));
+        // A database written on faux-person 0.2.0 has no country, and Hibernate's
+        // update adds the column as null.
+        try (Connection c = DriverManager.getConnection(url, "sa", ""); Statement st = c.createStatement()) {
+            assertEquals(1, st.executeUpdate("UPDATE company SET country = NULL"));
+        }
+        assertEquals(List.of(saved), store.findAll());
     }
 
     @Test

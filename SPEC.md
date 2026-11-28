@@ -10,7 +10,7 @@ people and saves them to a database through JPA.
 | Package | `org.tauasa.fauxjpa` |
 | Java | 17 (`maven.compiler.release=17`) |
 | Build | Maven |
-| Dependencies | `org.tauasa:faux-person:0.2.0`, Hibernate ORM 7.4 (Jakarta Persistence 3.2), H2 2.5. JUnit 6 at test scope |
+| Dependencies | `org.tauasa:faux-person:0.4.0`, Hibernate ORM 7.4 (Jakarta Persistence 3.2), H2 2.5. JUnit 6 at test scope |
 | Status | Draft, 2026-11-20 |
 
 ## Goals
@@ -38,33 +38,41 @@ position, so adding a region to faux-person can't change what a stored value
 means.
 
 ```
-person                                   company
-------------------------------------     ---------------------------
-id             BIGINT  PK (sequence)     id      BIGINT  PK (sequence)
-first_name     VARCHAR NOT NULL          name    VARCHAR NOT NULL
-last_name      VARCHAR NOT NULL          city    VARCHAR NOT NULL
-gender         VARCHAR NOT NULL (enum)   state   VARCHAR NOT NULL
-region         VARCHAR NOT NULL (enum)   domain  VARCHAR NOT NULL UNIQUE
-date_of_birth  DATE    NOT NULL
-email          VARCHAR NOT NULL
-phone          VARCHAR NOT NULL
-street         VARCHAR NOT NULL
-city           VARCHAR NOT NULL
-state          VARCHAR NOT NULL
-postal_code    VARCHAR NOT NULL
-country        VARCHAR NOT NULL
-employer_id    BIGINT  NOT NULL FK -> company.id
+person                                       company
+----------------------------------------     ---------------------------
+id                 BIGINT  PK (sequence)     id      BIGINT  PK (sequence)
+first_name         VARCHAR NOT NULL          name    VARCHAR NOT NULL
+last_name          VARCHAR NOT NULL          city    VARCHAR NOT NULL
+native_first_name  VARCHAR                   state   VARCHAR NOT NULL
+native_last_name   VARCHAR                   country VARCHAR
+native_full_name   VARCHAR                   domain  VARCHAR NOT NULL UNIQUE
+gender             VARCHAR NOT NULL (enum)
+region             VARCHAR NOT NULL (enum)
+date_of_birth      DATE    NOT NULL
+email              VARCHAR NOT NULL
+phone              VARCHAR NOT NULL
+street             VARCHAR NOT NULL
+city               VARCHAR NOT NULL
+state              VARCHAR NOT NULL
+postal_code        VARCHAR NOT NULL
+country            VARCHAR NOT NULL
+employer_id        BIGINT  NOT NULL FK -> company.id
 ```
 
 | Type | Maps | How |
 |---|---|---|
 | `PersonEntity` | `Person` | `@Entity`, table `person`. `name` and `address` are embedded; `employer` is `@ManyToOne` to `CompanyEntity` |
-| `NameEmbeddable` | `Name` | `@Embeddable`: `first_name`, `last_name` |
+| `NameEmbeddable` | `Name` | `@Embeddable`: `first_name`, `last_name`, and the native name's `native_first_name`, `native_last_name` and `native_full_name`, all null when the name has none |
 | `AddressEmbeddable` | `Address` | `@Embeddable`: `street`, `city`, `state`, `postal_code`, `country` |
-| `CompanyEntity` | `Company` | `@Entity`, table `company`, `domain` unique |
+| `CompanyEntity` | `Company` | `@Entity`, table `company`, `domain` unique. `state` is empty outside the US, and a null `country` reads back as `US` |
 
 Each type has a `from(...)` that copies a faux-person record in and a
 `to...()` that builds the record back, so goal 2 is one `equals` check.
+
+The native-name columns and `company.country` are nullable, so Hibernate's
+`update` can add them to a database written on faux-person 0.2.0. Every
+company in one of those is a US company, which is why a null country reads
+back as `US`.
 
 Marked and real companies are different rows: `costco.example` and
 `costco.com` are different domains.
@@ -111,6 +119,9 @@ what's already stored.
 | 500 people saved and read back equal the generated ones, in order | A field isn't stored, or is stored wrong |
 | Companies: one row per distinct employer domain, after two runs too | Employers are duplicated, or merged when they differ |
 | Marked and real runs of the same seed store different company rows | `--real-companies` and the default collide |
+| South Korean people read back with their Hangul names | The native name isn't stored |
+| Japanese people's employers read back with their country | The company's country isn't stored |
+| A company row with no country reads back as a US company | A database from faux-person 0.2.0 stops reading back |
 | `countByRegion` sums to `count` and is sorted | The summary lies |
 | `findByLastName` returns only that surname | The query leaks other people |
 | A failed save leaves nothing behind | A half-saved run survives |
