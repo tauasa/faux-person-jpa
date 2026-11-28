@@ -63,6 +63,7 @@ classDiagram
         String name
         String city
         String state
+        String country
         String domain (unique)
     }
     PersonEntity --> CompanyEntity : employer, many to one
@@ -119,7 +120,7 @@ line. [SPEC.md](SPEC.md) has the full design.
 
 ## Versions
 
-faux-person 0.2.0, Hibernate ORM 7.4 (Jakarta Persistence 3.2), H2 2.5 and
+faux-person 0.4.0, Hibernate ORM 7.4 (Jakarta Persistence 3.2), H2 2.5 and
 JUnit 6, all pinned in `pom.xml`.
 
 ## License

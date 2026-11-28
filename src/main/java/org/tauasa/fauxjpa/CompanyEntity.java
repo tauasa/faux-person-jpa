@@ -29,8 +29,16 @@ public class CompanyEntity {
     @Column(name = "city", nullable = false)
     private String city;
 
+    /** Two letters for a US company; empty for one in another country. */
     @Column(name = "state", nullable = false, length = 2)
     private String state;
+
+    /**
+     * ISO 3166-1 alpha-2. Nullable, so Hibernate can add the column to a
+     * database saved before it existed; those rows are all US companies.
+     */
+    @Column(name = "country", length = 2)
+    private String country;
 
     @Column(name = "domain", nullable = false, unique = true)
     private String domain;
@@ -50,6 +58,7 @@ public class CompanyEntity {
         e.name = c.name();
         e.city = c.city();
         e.state = c.state();
+        e.country = c.country();
         e.domain = c.domain();
         return e;
     }
@@ -60,7 +69,7 @@ public class CompanyEntity {
      * @return the company
      */
     public Company toCompany() {
-        return new Company(name, city, state, domain);
+        return new Company(name, city, state, country == null ? "US" : country, domain);
     }
 
     /**
